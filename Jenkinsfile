@@ -19,7 +19,7 @@ node ('workers') {
     }
     stage('Security Test') {
         imageTest.inside('-u root:root') {
-            sh 'nancy /go/src/github/jfmajer/movies-parser/Gopkg.lock'
+            sh 'nancy Gopkg.lock'
         }
     }
 }
