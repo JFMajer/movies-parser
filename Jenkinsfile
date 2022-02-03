@@ -4,10 +4,17 @@ node ('workers') {
     stage('Checkout') {
         checkout scm
     }
+
+    def imageTest = docker.build("${imageName}-test", "-f Dockerfile.test .")
+
     stage('Quality tests') {
-        def imageTest = docker.build("${imageName}-test", "-f Dockerfile.test .")
             imageTest.inside{
                 sh 'golint'
             }
+    }
+    stage('Security Test') {
+        imageTest.inside('-u root:root') {
+            sh 'nancy go/src/github/jfmajer/movies-parser/Gopkg.lock'
+        }
     }
 }
