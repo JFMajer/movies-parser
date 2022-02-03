@@ -12,6 +12,11 @@ node ('workers') {
                 sh 'golint'
             }
     }
+    stage('list files') {
+        imageTest.inside{
+            sh 'ls -la'
+        }
+    }
     stage('Security Test') {
         imageTest.inside('-u root:root') {
             sh 'nancy /go/src/github/jfmajer/movies-parser/Gopkg.lock'
