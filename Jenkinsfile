@@ -19,7 +19,7 @@ node ('workers') {
     }
     stage('Security Test') {
         imageTest.inside('-u root:root') {
-            sh 'go list -json -deps | nancy sleuth && nancy sleuth -p Gopkg.lock'
+            sh 'go list -json -deps | nancy sleuth && nancy sleuth -p ./Gopkg.lock'
         }
     }
 }
