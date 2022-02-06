@@ -6,20 +6,23 @@ node ('workers') {
     }
 
     def imageTest = docker.build("${imageName}-test", "-f Dockerfile.test .")
+        stage('Pre-integration Tests') {
+            parallel(
+                'Quality Tests': {
+                     imageTest.inside{
+                         sh 'golint'
+                         }
+                    },
+                'List Files': {                
+                     imageTest.inside{
+                        sh 'ls -la'
+                        }
+                    },
+                'Security Tests': {            
+                    imageTest.inside('-u root:root') {
+                        sh 'nancy --version'
+                         }
+                    }
+                    )
+        }
 
-    stage('Quality tests') {
-            imageTest.inside{
-                sh 'golint'
-            }
-    }
-    stage('list files') {
-        imageTest.inside{
-            sh 'ls -la'
-        }
-    }
-    stage('Security Test') {
-        imageTest.inside('-u root:root') {
-            sh 'nancy --version'
-        }
-    }
-}
