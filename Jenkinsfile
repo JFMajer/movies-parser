@@ -19,7 +19,7 @@ node ('workers') {
     }
     stage('Security Test') {
         imageTest.inside('-u root:root') {
-            sh 'go list -json -deps | docker run --rm -i sonatypecommunity/nancy:latest sleuth'
+            sh 'nancy --version'
         }
     }
 }
